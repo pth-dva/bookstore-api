@@ -324,14 +324,7 @@ async def add_categories(request: AddCategoryRequest):
 @app.get("/api/user/categories", response_model=CategoryListResponse)
 async def get_book_categories(request: Request, token=Depends(token_checker)):
     if token is not None:
-        return JSONResponse(
-            status_code=401,
-            content={
-                "code": 401,
-                "message": "Unauthenticated user",
-                "data": None
-            }
-        )
+        return token
     categories: list[Category] = session.query(Category).all()
     categories_list = list(map(lambda x: CategoryDataItem(id=x.id.hex, category_name=x.name), categories))
     response = CategoryListResponse(code=200, message="Success",
