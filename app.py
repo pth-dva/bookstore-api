@@ -248,16 +248,26 @@ async def login(request: LoginRequest):
             content=LoginResponse(code=404, message="User not found", data=None).__dict__)
     else:
         payload = {
-            'user_id': user.id,
+            'user_id': user.id.hex,
             'username': user.name,
             'exp': datetime.utcnow() + timedelta(days=1)  # Expiration time (1 day from now)
         }
         # return LoginResponse(data=LoginData(access_token="aa"))
 
-        return JSONResponse(
+
+        return  JSONResponse(
             status_code=200,
-            content=LoginResponse(code=0, message="Success", data=LoginData(
-                access_token=jwt.encode(payload, algorithm='HS256', key=secret_key))).__dict__)
+            content= {
+                'code': 0,
+                'message': 'Success',
+                'data': jwt.encode(payload, algorithm='HS256', key=secret_key)
+            }
+        )
+
+        # return JSONResponse(
+        #     status_code=200,
+        #     content=LoginResponse(code=0, message="Success", data=LoginData(
+        #         access_token=jwt.encode(payload, algorithm='HS256', key=secret_key))).__dict__)
 
 
 @app.post("/api/auth/register", response_model=RegisterResponse)
