@@ -260,7 +260,9 @@ async def login(request: LoginRequest):
             content= {
                 'code': 0,
                 'message': 'Success',
-                'data': jwt.encode(payload, algorithm='HS256', key=secret_key)
+                'data': {
+                    'access_token': jwt.encode(payload, algorithm='HS256', key=secret_key)
+                }
             }
         )
 
