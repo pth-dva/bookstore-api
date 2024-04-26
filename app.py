@@ -42,12 +42,13 @@ app.add_middleware(
 # Define middleware to check JWT token in header
 async def token_checker(request: Request):
     token = request.headers.get('Authorization')
+    print(token.replace('Bearer ', ''))
     # print(request.headers.get('Authorization'))
     # raise HTTPException(status_code=401, detail="Token has Expired")
     # return JSONResponse(status_code=401, content={"detail": "Token has expired"})
     if token:
         try:
-            payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+            payload = jwt.decode(token.replace('Bearer ', ''), secret_key, algorithms=['HS256'])
             request.state.user = payload
             print(payload)
             return None
@@ -354,9 +355,9 @@ async def add_categories(request: AddAuthorsRequest):
 
 
 @app.get("/api/user/authors", response_model=AuthorListResponse)
-async def get_book_authors(request: Request):
-    # if token is not None:
-    #     return token
+async def get_book_authors(request: Request, token=Depends(token_checker)):
+    if token is not None:
+        return token
     authors: list[Author] = session.query(Author).all()
     authors_list = list(
         map(lambda x: AuthorDataItem(id=x.id.hex, name=x.name, description=x.author_description), authors))
@@ -395,9 +396,9 @@ async def add_books(request: AddBooksRequest):
 
 
 @app.get("/api/user/books")
-async def get_books(request: Request):
-    # if token is not None:
-    #     return token
+async def get_books(request: Request, token=Depends(token_checker)):
+    if token is not None:
+        return token
     books: list[Books] = session.query(Books).all()
     print(f"{books[0].author.author_description} books found")
 
