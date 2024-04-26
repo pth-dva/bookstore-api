@@ -42,7 +42,6 @@ app.add_middleware(
 # Define middleware to check JWT token in header
 async def token_checker(request: Request):
     token = request.headers.get('Authorization')
-    print(token.replace('Bearer ', ''))
     # print(request.headers.get('Authorization'))
     # raise HTTPException(status_code=401, detail="Token has Expired")
     # return JSONResponse(status_code=401, content={"detail": "Token has expired"})
