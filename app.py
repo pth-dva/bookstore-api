@@ -273,9 +273,9 @@ async def login(request: LoginRequest):
 
 @app.post("/api/auth/register", response_model=RegisterResponse)
 async def register(request: RegisterRequest):
+    print("Hello")
     user = User(name=request.user_name, email=request.email, password=request.password,
                 phone_number=request.phone_number)
-
     print(user)
     payload = {
         'user_id': user.id,
