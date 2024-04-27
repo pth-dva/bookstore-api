@@ -437,7 +437,7 @@ async def get_books(request: Request, token=Depends(token_checker)):
     if token is not None:
         return token
     books: list[Books] = session.query(Books).all()
-    print(f"{books[0].author.author_description} books found")
+    # print(f"{books[0].author.author_description} books found")
 
     books_list = list(map(lambda x: BookDataItem(
         id=x.id.hex,
