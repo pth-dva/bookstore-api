@@ -275,6 +275,8 @@ async def login(request: LoginRequest):
 async def register(request: RegisterRequest):
     user = User(name=request.user_name, email=request.email, password=request.password,
                 phone_number=request.phone_number)
+
+    print(user)
     payload = {
         'user_id': user.id,
         'username': user.name,
