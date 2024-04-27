@@ -454,7 +454,7 @@ async def get_books(request: Request, token=Depends(token_checker)):
                                         SpecialBooks(title="Best Sellers", type="CAROUSEL",
                                                      books=books_list),
                                         SpecialBooks(title="New Arrivals", type="GRID",
-                                                     books=books_list)
+                                                     books=books_list[:6])
                                     ],
                                     normal_books=books_list,
                                 )).encode()
