@@ -283,7 +283,7 @@ async def register(request: RegisterRequest):
         'exp': datetime.utcnow() + timedelta(days=1)  # Expiration time (1 day from now)
     }
     token = jwt.encode(payload, algorithm='HS256', key=secret_key)
-
+    print(token)
     try:
         session.add(user)
         session.commit()
