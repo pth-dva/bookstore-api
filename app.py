@@ -307,6 +307,42 @@ async def register(request: RegisterRequest):
         )
 
 
+@app.post("/api/auth/register2", response_model=RegisterResponse)
+async def register(request: RegisterRequest):
+    print("Hello")
+    user = User(name=request.user_name, email=request.email, password=request.password,
+                phone_number=request.phone_number)
+    print(user)
+    payload = {
+        'user_id': user.id,
+        'username': user.name,
+        'exp': datetime.utcnow() + timedelta(days=1)  # Expiration time (1 day from now)
+    }
+    token = jwt.encode(payload, algorithm='HS256', key=secret_key)
+    print(token)
+    try:
+        session.add(user)
+        session.commit()
+        response = RegisterResponse(code=201, message="Success", data=LoginData(access_token=token)).encode()
+        return JSONResponse(
+            status_code=201,
+            content=response,
+        )
+    except sqlalchemy.exc.IntegrityError as integrity_error:
+        print(integrity_error)
+        session.rollback()
+        return JSONResponse(
+            status_code=409,
+            content=RegisterResponse(code=409, message="User already exists", data=None).__dict__
+        )
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content=RegisterResponse(code=500, message="Something went wrong", data=None).__dict___
+        )
+
+
 @app.post("/api/add_categories")
 async def add_categories(request: AddCategoryRequest):
     categories = request.categories
