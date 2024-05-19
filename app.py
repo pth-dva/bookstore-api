@@ -141,6 +141,9 @@ class BaseResponse(BaseModel, Generic[T]):
 
 class LoginData(BaseModel):
     access_token: str
+    user_name: str
+    phone_number: str
+    email: str
 
 
 class LoginResponse(BaseResponse[LoginData]):
@@ -287,7 +290,12 @@ async def register(request: RegisterRequest):
     try:
         session.add(user)
         session.commit()
-        response = RegisterResponse(code=201, message="Success", data=LoginData(access_token=token)).encode()
+        response = RegisterResponse(code=201, message="Success", data=LoginData(
+            access_token=token,
+            user_name=user.name,
+            phone_number=user.phone_number,
+            email=user.email
+        )).encode()
         return JSONResponse(
             status_code=201,
             content=response,
@@ -323,7 +331,12 @@ async def register(request: RegisterRequest):
     try:
         session.add(user)
         session.commit()
-        response = RegisterResponse(code=201, message="Success", data=LoginData(access_token=token)).encode()
+        response = RegisterResponse(code=201, message="Success", data=LoginData(
+            access_token=token,
+            user_name=user.name,
+            phone_number=user.phone_number,
+            email=user.email
+        )).encode()
         return JSONResponse(
             status_code=201,
             content=response,
