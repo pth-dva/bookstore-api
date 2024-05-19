@@ -263,7 +263,10 @@ async def login(request: LoginRequest):
                 'code': 0,
                 'message': 'Success',
                 'data': {
-                    'access_token': jwt.encode(payload, algorithm='HS256', key=secret_key)
+                    'access_token': jwt.encode(payload, algorithm='HS256', key=secret_key),
+                    'user_name': user.name,
+                    "phone_number": user.phone_number,
+                    "email": user.email
                 }
             }
         )
